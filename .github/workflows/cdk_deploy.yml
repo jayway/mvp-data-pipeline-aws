@@ -1,0 +1,59 @@
+# This workflow deploys the pipeline to aws on push.
+
+name: CDK Deploy
+
+on:
+  push:
+    branches:
+      - master
+      - qa
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set stack to Prod Maybe
+      if: endsWith(github.ref, '/master')
+      run: |
+        echo "STACK_NAME=mvp-data-pipeline-aws" >> $GITHUB_ENV
+    - name: Set stack to QA Maybe
+      if: endsWith(github.ref, '/qa')
+      run: |
+        echo "STACK_NAME=mvp-data-pipeline-aws-qa" >> $GITHUB_ENV
+
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install pip & poetry
+      run: |
+        python -m pip install --upgrade pip poetry
+
+    # create a requirements file that can be used later by the cdk deploy step
+    - name: Export dependencies
+      run: |
+        poetry export -f requirements.txt --output requirements.txt
+
+    # this is the build step for the lambda code
+    - name: Build Lambda
+      run: |
+        cd src/lambda_code/api_gw_lambda
+        pip install -r requirements.txt -t .
+
+    # the deployment step expects AWS CDK python dependencies in a requirements.txt in its working directory.
+    # poetry export above should have placed it at src/requirements.txt
+    - name: CDK Deploy
+      uses: youyo/aws-cdk-github-actions@v1
+      with:
+        cdk_subcommand: 'deploy'
+        cdk_stack: ${{ env.STACK_NAME }}
+        actions_comment: false
+        working_dir: '.'
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWSPUBLICKEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWSSECRETKEY }}
+        AWS_DEFAULT_REGION: 'eu-west-1'

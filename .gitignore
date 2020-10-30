@@ -1,0 +1,9 @@
+cdk.out
+.venv
+.idea
+.DS_Store
+*/.ipynb_checkpoints
+__pycache__/
+
+# Specific api_creds ignore to not push credentials
+*/api_creds.json
