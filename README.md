@@ -19,6 +19,7 @@ Must have an AWS account with deploy access rights.
 ## Deploy
 
 - Fork the repository
+- Install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 - Install [poetry](https://python-poetry.org/)
 - Install AWS CDK
 
@@ -36,7 +37,7 @@ Must have an AWS account with deploy access rights.
 
     `$ poetry shell`
     
-- (Optional) Load a specific AWS profile
+- (Optional) Load a specific AWS profile, default used otherwise.
 
     `$ export AWS_PROFILE=<your profile name>`
 
@@ -44,7 +45,7 @@ Must have an AWS account with deploy access rights.
 
     `$ cdk bootstrap`
     
-- Set up your github secrets with the following parameters:
+- Set up your github secrets with the following parameters (used for deploys in github actions):
     - AWSPUBLICKEY
     - AWSSECRETKEY
     
@@ -66,7 +67,7 @@ changes will be made to the stack.
     
     `$ poetry shell`
     
-- (Optional) Load a specific AWS profile
+- (Optional) Load a specific AWS profile, default used otherwise.
 
     `$ export AWS_PROFILE=<your profile name>`
     
