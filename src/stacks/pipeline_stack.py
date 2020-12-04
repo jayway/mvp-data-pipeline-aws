@@ -18,7 +18,7 @@ class PipelineStack(core.Stack):
 
         # Bucket used to deliver events
         delivery_bucket = aws_s3.Bucket(
-            self, id=qa_maybe('my-event-storage-bucket'), bucket_name=qa_maybe('my-event-storage-bucket'),
+            self, id=qa_maybe('test-event-storage-bucket'), bucket_name=qa_maybe('test-event-storage-bucket'),
             block_public_access=aws_s3.BlockPublicAccess.BLOCK_ALL
         )
 
@@ -37,7 +37,7 @@ class PipelineStack(core.Stack):
             s3_destination_configuration={
                 'bucketArn': delivery_bucket.bucket_arn,
                 'bufferingHints': {
-                    'intervalInSeconds': 900,  # The recommended setting is 900 (maximum for firehose)
+                    'intervalInSeconds': 60,  # The recommended setting is 900 (maximum for firehose)
                     'sizeInMBs': 5
                 },
                 'compressionFormat': 'UNCOMPRESSED',
@@ -60,7 +60,8 @@ class PipelineStack(core.Stack):
             runtime=aws_lambda.Runtime.PYTHON_3_8,
             code=aws_lambda.Code.asset('src/lambda_code/api_gw_lambda'),
             handler='main.handler',
-            memory_size=128,
+            #memory_size=128,
+            memory_size=256,
             timeout=core.Duration.seconds(5),
             environment={
                 'region': self.region,

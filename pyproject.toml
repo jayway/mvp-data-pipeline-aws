@@ -5,13 +5,15 @@ description = "Template for MVP Data Pipeline in AWS"
 authors = ["Erik Munkby <erik.munkby@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+#python = "^3.8"
+python = "^3.7"
 "aws-cdk.core" = "^1.70.0"
 "aws-cdk.aws-lambda" = "^1.70.0"
 "aws-cdk.aws-apigateway" = "^1.70.0"
 "aws-cdk.aws-kinesisfirehose" = "^1.70.0"
 "aws-cdk.aws-s3" = "^1.70.0"
 "aws-cdk.aws-iam" = "^1.70.0"
+jupyter = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 pandas = "^1.1.3"
